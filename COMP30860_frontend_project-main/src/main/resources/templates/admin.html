@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin</title>
+
+    <script src="https://kit.fontawesome.com/1544eaa0ec.js" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+        crossorigin="anonymous"></script>
+
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+
+    <link rel="stylesheet" type="text/css" href="/style.css">
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <!-- This is the navbar which is implemented using bootstrap which will contain the search bar ,content section and contact us section -->
+                <nav class="navbar navbar-expand-xl bg-body-tertiary py-3 "
+                    style="box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px; z-index: 1; position: sticky;">
+                    <div class="container-fluid">
+                        <a class="navbar-brand px-3 d-flex flex-row" href="/">
+                            <h3 style="padding-left: 10px;">Dashboard</h3>
+                        </a>
+                    </div>
+                </nav>
+
+                <div class="container mt-4">
+                    <div class="row d-flex  justify-content-center align-content-center text-center ">
+                        <div class="col-md-4">
+                            <div class="card p-4">
+                                <div class="card-body">
+                                    <div class="d-flex flex-column">
+                                        <h3>Users</h3>
+                                        <h4 th:text="${total_users}"></h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card p-4">
+                                <div class="card-body">
+                                    <div class="d-flex flex-column">
+                                        <h3>Products</h3>
+                                        <h4 th:text="${total_products}"></h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="container mt-4 ">
+                    <div class="row text center p-3 mb-3" style="background-color: white; ">
+                        <div class="col-md-12">
+                            <h2>My Users</h2>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Username</th>
+                                        <th scope="col">Password</th>
+                                        <th scope="col">Admin</th>
+                                        <th scope="col">Delete</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="user : ${myUsers}">
+                                        <td th:text="${user.getUsername()}"></td>
+                                        <td th:text="${user.getPassword()}"></td>
+                                        <td th:text="${user.isAdmin()}"></td>
+                                        <td>
+
+                                            <a th:href="@{/changeAdmin/{id}(id=${user.getId()})}">
+                                                <button>Change Admin status</button>
+                                            </a>
+                                        </td>
+
+                        </div>
+                        </tr>
+                        </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row text center p-3" style="background-color: white; ">
+                    <div class="col-md-12">
+                        <h2>My Products</h2>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Item</th>
+                                    <th scope="col">Category</th>
+                                    <th scope="col">Price</th>
+                                    <th scope="col">Visibility</th>
+                                    <th scope="col">Change visibility</th>
+                                    <th scope="col">Edit product</th>
+
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="product : ${myProducts}">
+                                    <td th:text="${product.getName()}"></td>
+                                    <td th:text="${product.getCategory()}"></td>
+                                    <td th:text="'&euro;' + ${product.getPrice()}"></td>
+                                    <td th:text="${product.isVisible()}"></td>
+                                    <td> <a th:href="@{/changeVisibilityProduct/{id}(id=${product.getId()})}">
+                                            <button type="button">click to change Visibility</button>
+                                        </a></td>
+                                    <td> <a th:href="@{/editProduct/{id}(id=${product.getId()})}">
+                                        <button type="button">click to edit</button>
+                                    </a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="container mt-5 d-flex justify-content-center align-content-center">
+
+                            <form
+                                class="form-inline my-3 d-flex flex-column justify-content-center align-content-center"
+                                action="/admin" method="post" enctype="multipart/form-data">
+                                <h1>Add a Product</h1>
+                                <label class="mr-sm-2 mt-5" for="search">Product name:</label>
+                                <input class="form-control mr-sm-3" type="search" placeholder="Enter term"
+                                    aria-label="Search" name="name" id="name" required>
+                                <label class="mr-sm-2" for="search">Product category:</label>
+                                <input class="form-control mr-sm-3" type="search" placeholder="Enter term"
+                                    aria-label="Search" name="category" id="category" required>
+                                <label class="mr-sm-2" for="search">Product price:</label>
+                                <input class="form-control mr-sm-3" type="number" placeholder="Enter term"
+                                    aria-label="Search" name="price" id="price" required>
+
+
+                                <label class="mr-sm-2" for="search">Description</label>
+                                <input id="description" name="description">
+
+
+                                <label class="mr-sm-2" for="search">Product image:</label>
+                                <input class="form-control mr-sm-3" type="file" placeholder="Enter term"
+                                    aria-label="Search" name="img" id="image" accept="image/png, image/gif, image/jpeg">
+
+
+                                <button class="btn btn-primary" type="submit">Add</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="row text center p-3" style="background-color: white; ">
+                        <div class="col-md-12">
+                            <h2>All Orders</h2>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">User name</th>
+                                        <th scope="col">Models</th>
+                                        <th scope="col">Price</th>
+                                        <th scope="col">Status</th>
+                                        <th scope="col">Payment ID</th>
+                                        <th scope="col">Change Status</th>
+                                        <th scope="col">Delete order</th>
+
+
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="order : ${allOrders}">
+                                        <td th:text="${order.getUserName()}"></td>
+                                        <td th:text="${order.getProductNames()}"></td>
+                                        <td th:text="${order.getPrice()}"></td>
+                                        <td th:text="${order.getStatus()}"></td>
+                                        <td th:text="${order.getPaymentId()}"></td>
+                                        <td> <a th:href="@{/changeStatus/{id}(id=${order.getId()})}">
+                                                <button type="button">click to change Status</button>
+                                            </a></td>
+                                        <td> <a th:href="@{/delOrder/{id}(id=${order.getId()})}">
+                                                <button type="button">click to delete</button>
+                                            </a></td>
+
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+</body>
+
+</html>

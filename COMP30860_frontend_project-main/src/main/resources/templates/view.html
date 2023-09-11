@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${product.getName()}">PRODUCT NAME</title>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+        crossorigin="anonymous"></script>
+
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+
+    <link rel="stylesheet" type="text/css" href="/style.css">
+
+    <style>
+        .btn-notselected {
+            background-color: lightslategray;
+            color: black;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Login Navigation Bar -->
+    <nav class="navbar navbar-expand-xl bg-body-tertiary py-3"
+        style="box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px; z-index: 1; position: sticky;">
+        <div class="container-fluid">
+            <a class="navbar-brand px-3 d-flex flex-row" href="/">
+                <h3 style="padding-left: 10px;">AI Marketplace</h3>
+            </a>
+            <div class="justify-content-end" id="navbarSupportedContent">
+                <span class="nav-item" style="text-decoration: none;" th:if="${user.isLogged()}"
+                    th:text="${user.username}"></span>
+
+                <a class="nav-item" style="text-decoration: none;" th:if="${user.isLogged() && user.isAdmin()}"
+                    th:href="@{/admin}"> | You are an admin |</a>
+
+                <a class="nav-item" style="text-decoration: none;" th:if="${user.isLogged()} == false"
+                    th:href="@{/login}">Login</a>
+
+                <a class="nav-item" style="text-decoration: none;" th:if="${user.isLogged()}"
+                    th:href="@{/logout}">Logout</a>
+
+                <a class="nav-item position-relative" th:href="@{/cart}">
+                    <i style="font-size: 30px;" class="fa-solid fa-cart-shopping"></i>
+                    <span class="line text-decoration-none" th:text="${amount_in_cart}"></span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-lg mt-2  mt-5">
+
+        <div class="row">
+            <div class="col-md cart">
+                <div class="title">
+                    <div class="row">
+                        <span class="fw-bold fs-4" th:text="${product.getName()}">
+                            ITEM NAME
+                        </span>
+                    </div>
+                </div>
+                <hr>
+                <!-- Picture and explanation -->
+                <div class="row">
+                    <div class="col-5">
+                        <div class="row">
+                            <img class="img-fluid" th:src="'/'+ ${product.getPathToImg()}" alt="img">
+                        </div>
+                    </div>
+
+                    <!-- Settings -->
+                    <div class="col-5">
+
+                        <div class="row mt-2 mb-1 align-items-center mb-5">
+                            <h1>Description:</h1>
+                            <h2 class="col-12" th:text="${product.getDescription()}"></h2>
+                        </div>
+
+                        <div class="row mt-2 mb-1 align-items-center">
+                            <h4 class="col-12" th:text="'Price: ' + '&euro;' + ${product.getPrice()}"></h4>
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+                <!-- Back to shop -->
+                <div class="back-to-shop"><a href="/">&leftarrow;</a><span class="text-muted">Back to shop</span></div>
+            </div>
+
+            <!-- <div class="col-md-4 summary">
+                <div>
+                    <h5><b>You may also like</b></h5>
+                </div>
+                <hr>
+                <div th:each=" product : ${product_in_recommended}" class="row">
+                    <div class="col text-right">
+                        SUPER EXTRA PRODUCT YOU MAY LIKE
+                    </div>
+                </div>
+                <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
+                    <div class="col">TOTAL PRICE</div>
+                </div>
+                <a href="/checkout"><button class="btn">CHECKOUT</button></a>
+            </div> -->
+        </div>
+    </div>
+
+
+</body>
+
+<script>
+    var priceElement = document.querySelector("#price");
+    var tButton = document.querySelector("#trainedbtn");
+    var unButton = document.querySelector("#untrainedbtn");
+    var finalPrice = document.querySelector("#finalPrice");
+    var isTrained = false;
+
+    function setUntrained() {
+        if (isTrained) {
+            unButton.classList.remove("btn-notselected");
+            tButton.classList.add("btn-notselected");
+            newPrice = parseFloat(priceElement.innerHTML) / 1.5;
+            priceElement.innerHTML = newPrice;
+
+            finalPrice.value = newPrice;
+
+            isTrained = false;
+        }
+    };
+
+    function setTrained() {
+        if (!isTrained) {
+            console.log(tButton.classList.entries.toString());
+            tButton.classList.remove("btn-notselected");
+            unButton.classList.add("btn-notselected");
+
+            newPrice = parseFloat(priceElement.innerHTML) * 1.5;
+            priceElement.innerHTML = newPrice;
+
+            finalPrice.value = newPrice;
+
+            isTrained = true;
+        }
+    }
+</script>
+
+</html>
